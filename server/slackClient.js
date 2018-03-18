@@ -12,25 +12,47 @@ function handleOnAuthenticated(rtmStartData) {
 }
 
 function handleOnMessage(message) {
-    nlp.ask(message.text, (err, res) => {
-        if (err) {
-            console.log (err);
-            return;
-        }
+    if (message.text.toLowerCase().includes('iris')) {
+        nlp.ask(message.text, (err, res) => {
+            if (err) {
+                console.log (err);
+                return;
+            }
 
-        if (!res.intent) {
-            return rtm.sendMessage("Sorry, I don't know what you are talking about", message.channel);
-        } else if (res.intent[0].value == 'time' && res.location) {
-            return rtm.sendMessage(`I don't yet know the time in ${res.location[0].value}`, message.channel);
-        } else {
-            console.log (res);
-            return rtm.sendMessage("Sorry, I don't know what you are talking about", message.channel);
-        }
+            try {
+                if (!res.intent || !res.intent[0] || res.intent[0].value) {
+                    throw new Error ("Couould not extract intent.");
+                }
 
-        rtm.sendMessage('Sorry I did not understand.', message.channel, function messageSent() {
-            // optionally, you can supply a callback to execute once the message has been sent
+                const intent = require('../intents/' + resintetn[0].value + 'Intent');
+                intent.process(res, function (error, response) {
+                    if (error) {
+                        constole.log(error.messgae);
+                        return;
+                    }
+                    return rtm.sendMessage(response, message.channel);
+                })
+            } catch (err) {
+                console.log(err);
+                console.log(res);
+                rtm.sendMessage("Sorry, I don't know what to you are talking about", message.channel);
+            }
+    
+            if (!res.intent) {
+                return rtm.sendMessage("Sorry, I don't know what you are talking about", message.channel);
+            } else if (res.intent[0].value == 'time' && res.location) {
+                return rtm.sendMessage(`I don't yet know the time in ${res.location[0].value}`, message.channel);
+            } else {
+                console.log (res);
+                return rtm.sendMessage("Sorry, I don't know what you are talking about", message.channel);
+            }
+    
+            rtm.sendMessage('Sorry I did not understand.', message.channel, function messageSent() {
+                // optionally, you can supply a callback to execute once the message has been sent
+            });    
         });
-    });
+    }
+    
 
 
 }
