@@ -20,11 +20,11 @@ function handleOnMessage(message) {
             }
 
             try {
-                if (!res.intent || !res.intent[0] || res.intent[0].value) {
+                if (!res.intent || !res.intent[0] || !res.intent[0].value) {
                     throw new Error ("Couould not extract intent.");
                 }
 
-                const intent = require('../intents/' + resintetn[0].value + 'Intent');
+                const intent = require('./intents/' + res.intent[0].value + 'Intent');
                 intent.process(res, function (error, response) {
                     if (error) {
                         constole.log(error.messgae);
