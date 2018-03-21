@@ -10,7 +10,6 @@ module.exports.process = function process(intentData, cb) {
 
     const location = intentData.location[0].value;
 
-    console.log(`http://localhost:3010/service/${location}`);
     request.get(`http://localhost:3010/service/${location}`, (err, res) => {
         if(err || res.statusCode != 200 || !res.body.result) {
             console.log(err);
