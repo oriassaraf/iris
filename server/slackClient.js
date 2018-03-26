@@ -28,7 +28,7 @@ function handleOnMessage(message) {
                 const intent = require('./intents/' + res.intent[0].value + 'Intent');
                 intent.process(res, registry, function (error, response) {
                     if (error) {
-                        constole.log(error.messgae);
+                        console.log(error.messgae);
                         return;
                     }
                     return rtm.sendMessage(response, message.channel);
@@ -38,25 +38,8 @@ function handleOnMessage(message) {
                 console.log(res);
                 rtm.sendMessage("Sorry, I don't know what to you are talking about", message.channel);
             }
-    
-            if (!res.intent) {
-                return rtm.sendMessage("Sorry, I don't know what you are talking about", message.channel);
-            } else if (res.intent[0].value == 'time' && res.location) {
-                //TO DO: figure out why this message appears even if there is a time returned.
-                return rtm.sendMessage(`IRIS: I don't yet know the time in ${res.location[0].value}`, message.channel);
-            } else {
-                console.log (res);
-                return rtm.sendMessage("Sorry, I don't know what you are talking about", message.channel);
-            }
-    
-            rtm.sendMessage('Sorry I did not understand.', message.channel, function messageSent() {
-                // optionally, you can supply a callback to execute once the message has been sent
-            });    
         });
     }
-    
-
-
 }
 
 function addAuthenticatedHandler(rtm, handler) {
