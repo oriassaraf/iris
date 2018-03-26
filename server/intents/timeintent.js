@@ -8,13 +8,17 @@ module.exports.process = function process(intentData, registry, cb) {
 
     if (!intentData.location) return cb(new Error('Missing location in time intent'));
 
-    const location = intentData.location[0].value;
+    const location = intentData.location[0].value.replace(/,.?iris/i,'');
 
     const service = registry.get('time');
-    if (!service) return cb(false, 'No service avilable');
+    if (!service) {
+        console.log('No service avilable');
+        return cb(false, 'No service avilable');
+    }
 
     request.get(`http://${service.ip}:${service.port}/service/${location}`, (err, res) => {
         if(err || res.statusCode != 200 || !res.body.result) {
+            console.log('error call iris-time')
             console.log(err);
             return cb(false, `I had a problem finding out the time in ${location} `);
         }

@@ -26,7 +26,7 @@ class ServiceRegistry {
     }
 
     remove(intent, ip, port) {
-        const key = intent+ip+port;
+        const key = intent + ip + port;
         delete this._services[key];
     }
 
@@ -43,10 +43,9 @@ class ServiceRegistry {
         const now = Math.floor(new Date() / 1000);
 
         for (let key in this._services) {
-            if (this._services[key].timestamp + this._timeout < 1000) {
-                console.log(`Removed services for intent ${this._services[key].intent}`)
-                delete this._Services[key]
-
+            if (this._services[key].timestamp + this._timeout < now) {
+                console.log(`Removed services for intent ${this._services[key].intent}`);
+                delete this._services[key];
             }
         }
     }
